@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StarMatch - Find Your Perfect Match</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- Loading Screen -->
+        <div id="loading-screen" class="screen active">
+            <div class="loading-content">
+                <div class="logo">✨ StarMatch</div>
+                <p class="loading-text">Loading your perfect matches...</p>
+            </div>
+        </div>
+
+        <!-- Home Screen -->
+        <div id="home-screen" class="screen">
+            <div class="header">
+                <div class="logo-small">✨ StarMatch</div>
+                <div class="user-stats">
+                    <span class="stat">⭐ <span id="stars-count">0</span></span>
+                    <span class="stat">🎯 <span id="free-matches-count">0</span></span>
+                    <span class="stat">🔥 <span id="streak-count">0</span></span>
+                </div>
+            </div>
+
+            <div class="welcome-section">
+                <h1>Welcome, <span id="user-name">Friend</span>! 💝</h1>
+                <p class="subtitle">Find your perfect match today</p>
+            </div>
+
+            <div class="match-buttons">
+                <button class="match-btn random-btn" id="random-match-btn">
+                    <div class="btn-icon">🎲</div>
+                    <div class="btn-content">
+                        <h3>Random Match</h3>
+                        <p>Free • Surprise me!</p>
+                    </div>
+                </button>
+
+                <button class="match-btn filtered-btn" id="filtered-match-btn">
+                    <div class="btn-icon">🎯</div>
+                    <div class="btn-content">
+                        <h3>Filtered Match</h3>
+                        <p>15 Stars • Choose preferences</p>
+                    </div>
+                </button>
+            </div>
+
+            <div class="quick-actions">
+                <button class="action-btn" id="profile-btn">
+                    <span class="action-icon">👤</span>
+                    <span>Profile</span>
+                </button>
+                <button class="action-btn" id="matches-btn">
+                    <span class="action-icon">💕</span>
+                    <span>Matches</span>
+                </button>
+                <button class="action-btn" id="buy-stars-btn">
+                    <span class="action-icon">⭐</span>
+                    <span>Buy Stars</span>
+                </button>
+                <button class="action-btn" id="referral-btn">
+                    <span class="action-icon">🎁</span>
+                    <span>Invite</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Profile Screen -->
+        <div id="profile-screen" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" data-back="home">← Back</button>
+                <h2>Your Profile</h2>
+            </div>
+
+            <div class="profile-content">
+                <div class="profile-photo">
+                    <div class="photo-placeholder" id="profile-photo">👤</div>
+                </div>
+
+                <form id="profile-form">
+                    <div class="form-group">
+                        <label>Age</label>
+                        <input type="number" id="age" min="18" max="100" placeholder="Enter your age">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Gender</label>
+                        <select id="gender">
+                            <option value="">Select gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Location</label>
+                        <input type="text" id="location" placeholder="City, Country">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Interests (comma separated)</label>
+                        <input type="text" id="interests" placeholder="Travel, Music, Sports...">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Bio</label>
+                        <textarea id="bio" rows="4" placeholder="Tell us about yourself..."></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Save Profile</button>
+                </form>
+
+                <div class="profile-stats">
+                    <div class="stat-box">
+                        <div class="stat-value" id="profile-stars">0</div>
+                        <div class="stat-label">Stars</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="profile-referrals">0</div>
+                        <div class="stat-label">Referrals</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="profile-streak">0</div>
+                        <div class="stat-label">Day Streak</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters Screen -->
+        <div id="filters-screen" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" data-back="home">← Back</button>
+                <h2>Set Your Filters</h2>
+            </div>
+
+            <div class="filters-content">
+                <p class="filters-cost">Cost: 15 Stars (or 1 free match)</p>
+
+                <form id="filters-form">
+                    <div class="form-group">
+                        <label>Gender Preference</label>
+                        <select id="filter-gender">
+                            <option value="">Any</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Age Range</label>
+                        <div class="range-inputs">
+                            <input type="number" id="filter-age-min" placeholder="Min" min="18" max="100">
+                            <span>to</span>
+                            <input type="number" id="filter-age-max" placeholder="Max" min="18" max="100">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Location</label>
+                        <input type="text" id="filter-location" placeholder="City or Country">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Interests (comma separated)</label>
+                        <input type="text" id="filter-interests" placeholder="Travel, Music, Sports...">
+                    </div>
+
+                    <button type="submit" class="submit-btn">Find Match</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Match Result Screen -->
+        <div id="match-screen" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" data-back="home">← Back</button>
+                <h2>Your Match!</h2>
+            </div>
+
+            <div class="match-content">
+                <div class="match-card">
+                    <div class="match-photo">
+                        <div class="photo-placeholder" id="match-photo">💝</div>
+                    </div>
+                    
+                    <div class="match-info">
+                        <h3 id="match-name">Loading...</h3>
+                        <p class="match-meta">
+                            <span id="match-age">Age</span>, 
+                            <span id="match-gender">Gender</span>
+                        </p>
+                        <p class="match-location" id="match-location">📍 Location</p>
+                        <p class="match-bio" id="match-bio">Bio...</p>
+                        <div class="match-interests" id="match-interests"></div>
+                    </div>
+
+                    <div class="match-actions">
+                        <button class="match-action-btn pass-btn" id="pass-btn">
+                            <span class="action-icon">👎</span>
+                            <span>Pass</span>
+                        </button>
+                        <button class="match-action-btn like-btn" id="like-btn">
+                            <span class="action-icon">💚</span>
+                            <span>Interested</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Matches List Screen -->
+        <div id="matches-list-screen" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" data-back="home">← Back</button>
+                <h2>Your Matches</h2>
+            </div>
+
+            <div class="matches-list-content">
+                <div id="matches-list"></div>
+            </div>
+        </div>
+
+        <!-- Admin Panel -->
+        <div id="admin-screen" class="screen">
+            <div class="screen-header">
+                <button class="back-btn" data-back="home">← Back</button>
+                <h2>Admin Panel</h2>
+            </div>
+
+            <div class="admin-content">
+                <div class="admin-stats">
+                    <div class="admin-stat-box">
+                        <h4>Total Users</h4>
+                        <p id="admin-total-users">0</p>
+                    </div>
+                    <div class="admin-stat-box">
+                        <h4>Active Users</h4>
+                        <p id="admin-active-users">0</p>
+                    </div>
+                    <div class="admin-stat-box">
+                        <h4>Total Revenue</h4>
+                        <p id="admin-revenue">0 ⭐</p>
+                    </div>
+                </div>
+
+                <div class="admin-section">
+                    <h3>Recent Transactions</h3>
+                    <div id="admin-transactions"></div>
+                </div>
+
+                <div class="admin-section">
+                    <h3>Recent Users</h3>
+                    <div id="admin-users"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
